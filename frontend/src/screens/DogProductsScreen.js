@@ -18,7 +18,7 @@ const HomeScreen = () => {
 
 	return (
 		<>
-			<h2>Для кошек</h2>
+			<h2>Для собак</h2>
 			{loading ? (
 				<Loader />
 			) : error ? (
@@ -26,21 +26,12 @@ const HomeScreen = () => {
 			) : (
 				<Row>
 					{products.map((product) => (
-						<Col key={product._id} sm={12} md={6} lg={4} xl={3}>
+						<Col key={product.category.Cats} sm={12} md={6} lg={4} xl={3}>
 							<Product product={product} />
 						</Col>
 					))}
 				</Row>
 			)}
-
-			<h2>Для собак</h2>
-			<Row>
-				{products.map((product) => (
-					<Col key={product._id} sm={12} md={6} lg={4} xl={3}>
-						<Product product={product} />
-					</Col>
-				))}
-			</Row>
 		</>
 	)
 }
