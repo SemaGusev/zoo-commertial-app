@@ -11,6 +11,7 @@ import {
 // Чтобы реализовать желаемую сортировку необходимо добавить
 // дополнительных компонентов productActions но с
 // const { data } = await axios.get('/api/products/cats/${id}')
+
 export const listProducts = () => async (dispatch) => {
 	try {
 		dispatch({
@@ -34,9 +35,6 @@ export const listProducts = () => async (dispatch) => {
 	}
 }
 
-// Чтобы реализовать желаемую сортировку необходимо добавить
-// дополнительных компонентов productActions но с
-// const { data } = await axios.get('/api/products/cats/${id}')
 export const listProductDetails = (id) => async (dispatch) => {
 	try {
 		dispatch({

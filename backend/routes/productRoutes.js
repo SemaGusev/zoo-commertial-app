@@ -1,35 +1,23 @@
 import express from 'express'
-import asyncHandler from 'express-async-handler'
+
+// Обработка запросов, адресованных конкретным ресурсам. Мини-приложение для маршрутизации
+// https://expressjs.com/ru/guide/routing.html
 const router = express.Router()
-import Product from '../models/productModel.js'
+import {
+	getProductById,
+	getProducts,
+} from '../controllers/productController.js'
 
-// @desc    Fetch all products
-// @route   GET /api/products
-// @access  Public
-router.get(
-	'/',
-	asyncHandler(async (req, res) => {
-		const products = await Product.find({})
+router.route('/').get(getProducts)
 
-		res.json(products)
-	})
-)
-
-// @desc    Fetch single product
-// @route   GET /api/products/:id
-// @access  Public
-router.get(
-	'/:id',
-	asyncHandler(async (req, res) => {
-		const product = await Product.findById(req.params.id)
-
-		if (product) {
-			res.json(product)
-		} else {
-			res.status(404)
-			throw new Error('Product not found')
-		}
-	})
-)
+// Функция промежуточной обработки, монтируемая в путь /user/:id
+router.route('/:id').get(getProductById)
 
 export default router
+
+// Метод router.route() позволяет создавать обработчики маршрутов, образующие цепочки, для пути маршрута.
+
+// Данное приложение теперь сможет обрабатывать запросы, адресованные ресурсам / и /РандомныйАйдиПользователя,
+// а также вызывать специальную функцию промежуточной обработки timeLog данного маршрута.
+
+// https://expressjs.com/ru/guide/using-middleware.html
