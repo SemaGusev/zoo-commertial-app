@@ -10,7 +10,7 @@ import {
 
 router.route('/').get(getProducts)
 
-// Функция промежуточной обработки, монтируемая в путь /user/:id
+// Функция промежуточной обработки, монтируемая в путь /:id
 router.route('/:id').get(getProductById)
 
 export default router

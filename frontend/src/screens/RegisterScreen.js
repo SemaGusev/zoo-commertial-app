@@ -5,20 +5,23 @@ import { useDispatch, useSelector } from 'react-redux'
 import FormContainer from '../components/FormContainer'
 import Message from '../components/Message'
 import Loader from '../components/Loader'
-import { login } from '../actions/userActions'
+import { register } from '../actions/userActions'
 
 // Если появляется ошибка "Unexpected use of 'history'"
 //нужно прописать его прямо здесь   ||
 //                                  ||
-const LoginScreen = ({ location, history }) => {
+const RegisterScreen = ({ location, history }) => {
+	const [name, setName] = useState('')
 	const [email, setEmail] = useState('')
 	const [password, setPassword] = useState('')
+	const [confirmPassword, setConfirmPassword] = useState('')
+	const [message, setMessage] = useState(null)
 	// const [phoneNumber, setPhoneNumber] = useState('')
 
 	const dispatch = useDispatch()
 
-	const userLogin = useSelector((state) => state.userLogin)
-	const { loading, error, userInfo } = userLogin
+	const userRegister = useSelector((state) => state.userRegister)
+	const { loading, error, userInfo } = userRegister
 
 	//split - превращает строку в массив элементов
 	const redirect = location.search ? location.search.split('=')[1] : '/'
@@ -32,15 +35,30 @@ const LoginScreen = ({ location, history }) => {
 
 	const submitHandler = (e) => {
 		e.preventDefault()
-		dispatch(login(email, password))
+		if (password !== confirmPassword) {
+			setMessage('Passwords do not match')
+		} else {
+			dispatch(register(name, email, password))
+		}
 	}
 
 	return (
 		<FormContainer>
-			<h1>Войти</h1>
+			<h1>Регистрация</h1>
+			{message && <Message variant="danger">{message}</Message>}
 			{error && <Message variant="danger">{error}</Message>}
 			{loading && <Loader />}
 			<Form onSubmit={submitHandler}>
+				<Form.Group controlId="name">
+					<Form.Label>Фамилия и имя</Form.Label>
+					<Form.Control
+						type="name"
+						placeholder="Иванов Иван"
+						value={name}
+						onChange={(e) => setName(e.target.value)}
+					></Form.Control>
+				</Form.Group>
+
 				<Form.Group controlId="email">
 					<Form.Label>Адрес электронной почты</Form.Label>
 					<Form.Control
@@ -61,25 +79,37 @@ const LoginScreen = ({ location, history }) => {
 					></Form.Control>
 				</Form.Group>
 
-				{/* <Form.Group controlId="phoneNumber">
+				<Form.Group controlId="password">
+					<Form.Label>Подтверждение пароля</Form.Label>
+					<Form.Control
+						type="password"
+						placeholder="password123"
+						value={confirmPassword}
+						onChange={(e) => setConfirmPassword(e.target.value)}
+					></Form.Control>
+				</Form.Group>
+
+				{/* <Form.Group controlId="tel">
 					<Form.Label>Номер телефона</Form.Label>
 					<Form.Control
-						type="phoneNumber"
+						type="text"
+						className="tel"
+						id="tel"
 						placeholder="+375(29)123-45-67"
 						value={phoneNumber}
 						onChange={(e) => setPhoneNumber(e.target.value)}
 					></Form.Control>
 				</Form.Group> */}
 				<Button type="submit" variant="success">
-					Войти
+					Регистрация
 				</Button>
 			</Form>
 
 			<Row className="py-3">
 				<Col>
-					Новый пользователь?{' '}
-					<Link to={redirect ? `/register?redirect=${redirect}` : '/register'}>
-						Регистрация
+					Уже есть аккаунт?{' '}
+					<Link to={redirect ? `/login?redirect=${redirect}` : '/login'}>
+						Войти
 					</Link>
 				</Col>
 			</Row>
@@ -87,4 +117,4 @@ const LoginScreen = ({ location, history }) => {
 	)
 }
 
-export default LoginScreen
+export default RegisterScreen
